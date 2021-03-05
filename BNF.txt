@@ -1,0 +1,33 @@
+<program> ::= <class> // | <struct> | <enum> | <using>
+<prefix_modifier> ::= "static" | "dynamic" | "abstract" | "virtual" | "override" | "final"
+<class> ::= <accessor>? <prefix_modifier>* "class" <ident> (":" <ident>*)? "{" (<method> | <member_variable> | <constructor> | <property> | <destructor)* "}"
+<method> ::= <accessor>? <prefix_modifier>* "method" <ident> "(" ("var" <ident> ":" <type>)* ")" ":" <type> <block>
+<block> ::= <statement>*
+
+public static method Main(var args: string[]): void {
+
+}
+
+public static class Factory {
+
+}
+
+public class Person : Animal, IMoveAble {
+
+}
+
+public constructor(var name: string, var age: int) {
+
+}
+
+public dynamic method AddPerson(var name: string, var age: int): void {
+
+}
+
+public dynamic method GetPersonList(): Person[] {
+
+}
+
+public destructor {
+
+}

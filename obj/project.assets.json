@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/mnt/c/Users/Kosuke Futamata/source/repos/mplc/mplc.csproj",
+      "projectUniqueName": "/mnt/c/Users/Kosuke Futamata/source/repos/MPLC/mplc.csproj",
       "projectName": "mplc",
-      "projectPath": "/mnt/c/Users/Kosuke Futamata/source/repos/mplc/mplc.csproj",
+      "projectPath": "/mnt/c/Users/Kosuke Futamata/source/repos/MPLC/mplc.csproj",
       "packagesPath": "/root/.nuget/packages/",
-      "outputPath": "/mnt/c/Users/Kosuke Futamata/source/repos/mplc/obj/",
+      "outputPath": "/mnt/c/Users/Kosuke Futamata/source/repos/MPLC/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/root/.nuget/NuGet/NuGet.Config"
