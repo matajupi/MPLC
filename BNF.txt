@@ -1,30 +1,30 @@
-<program> ::= <class> // | <struct> | <enum> | <using>
-<prefix_modifier> ::= "static" | "dynamic" | "abstract" | "virtual" | "override" | "final"
-<class> ::= <accessor>? <prefix_modifier>* "class" <ident> (":" <ident>*)? "{" (<method> | <member_variable> | <constructor> | <property> | <destructor)* "}"
-<method> ::= <accessor>? <prefix_modifier>* "method" <ident> "(" ("var" <ident> ":" <type>)* ")" ":" <type> <block>
-<block> ::= <statement>*
+<program>           ::= <class>  | <struct> | <using> | <enum> | <interface>
+<prefix_modifier>   ::= "static" | "dynamic" | "abstract" | "override" | "virtual" | "final"
+<class>             ::= <accessor>? <prefix_modifier>* "class" <ident> (":" <ident>* )? "{" (<method> | <property> | <member_variable> | <enum> | <constructor> | <destructor>)* "}"
+<method>            ::= <accessor>? <prefix_modifier>* "method" <ident> "(" ("var" <ident> ":" <type>)* ")" ":" <type> <block>
+<member_variable>   ::= <accessor>? <prefix_modifier>* "var" <ident> ":" <type> ("=" <expression>)? ";"
 
 public static method Main(var args: string[]): void {
 
 }
 
-public static class Factory {
+public dynamic method Add(var a: int, var b: int): int {
 
 }
 
-public class Person : Animal, IMoveAble {
-
-}
-
-public constructor(var name: string, var age: int) {
-
-}
-
-public dynamic method AddPerson(var name: string, var age: int): void {
+public dynamic class Person : Animal, ITokeAble {
 
 }
 
 public dynamic method GetPersonList(): Person[] {
+
+}
+
+public dynamic method GetPersonByName(var name: string): Person {
+
+}
+
+public constructor(var name: string, var age: int) {
 
 }
 

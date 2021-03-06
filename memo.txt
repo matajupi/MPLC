@@ -1,0 +1,5 @@
+最終的にコンパイルするときはdotnet publish -c Release -r linux-x64 --self-contained trueでコンパイルし自己完結型（ランタイムに依存しない）の実行ファイルを作成する。
+これにより.NET Coreのランタイムがなくても実行できるようになる。
+https://qiita.com/Nossa/items/67b29c496511026826c4
+
+コンパイラではアセンブルまで実行する。
