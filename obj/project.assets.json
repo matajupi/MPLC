@@ -8,31 +8,24 @@
     "net5.0": []
   },
   "packageFolders": {
-    "C:\\Users\\Kosuke Futamata\\.nuget\\packages\\": {},
-    "C:\\Microsoft\\Xamarin\\NuGet\\": {}
+    "/root/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Kosuke Futamata\\source\\repos\\MPLC\\Compiler\\Compiler.csproj",
-      "projectName": "Compiler",
-      "projectPath": "C:\\Users\\Kosuke Futamata\\source\\repos\\MPLC\\Compiler\\Compiler.csproj",
-      "packagesPath": "C:\\Users\\Kosuke Futamata\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Kosuke Futamata\\source\\repos\\MPLC\\Compiler\\obj\\",
+      "projectUniqueName": "/mnt/c/Users/Kosuke Futamata/source/repos/mplc/mplc.csproj",
+      "projectName": "mplc",
+      "projectPath": "/mnt/c/Users/Kosuke Futamata/source/repos/mplc/mplc.csproj",
+      "packagesPath": "/root/.nuget/packages/",
+      "outputPath": "/mnt/c/Users/Kosuke Futamata/source/repos/mplc/obj/",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Microsoft\\Xamarin\\NuGet\\"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Kosuke Futamata\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        "/root/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net5.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -65,7 +58,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/root/.dotnet/sdk/5.0.103/RuntimeIdentifierGraph.json"
       }
     }
   }

@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Compiler
+namespace mplc
 {
     /// <summary>
     /// Tokenize the passed text.
     /// </summary>
-    public class Tokenizer
+    class Tokenizer
     {
         /// <summary>
         /// Token identifier.
@@ -31,8 +31,6 @@ namespace Compiler
         /// <summary>
         /// Checks if there is a specified value in TokenString.
         /// </summary>
-        /// <param name="ident">value</param>
-        /// <returns>true or false</returns>
         public static bool ExistsKey(string ident)
         {
             return TokenString.Where(x => x.Value == ident).ToList().Count > 0;
@@ -41,8 +39,6 @@ namespace Compiler
         /// <summary>
         /// Reverse reference to TokenString and return its key.
         /// </summary>
-        /// <param name="ident">value</param>
-        /// <returns>key</returns>
         public static TokenKind ReverseReference(string ident)
         {
             return TokenString.FirstOrDefault(x => x.Value == ident).Key;
@@ -51,8 +47,6 @@ namespace Compiler
         /// <summary>
         /// Returns the length of the number following the given string.
         /// </summary>
-        /// <param name="t">given string</param>
-        /// <returns>length</returns>
         public static int DigitLength(string t)
         {
             int len;
@@ -61,9 +55,9 @@ namespace Compiler
         }
 
 
-        public string Text { get; }
-        public Tuple<TokenKind, string>[] Tokens { get; }
-        public int Index { get; set; }
+        public string Text { get; private set; }
+        public Token[] Tokens { get; private set; }
+        public int Index { get; private set; }
 
         public Tokenizer(string text)
         {
@@ -72,9 +66,9 @@ namespace Compiler
             this.Index = 0;
         }
 
-        private Tuple<TokenKind, string>[] Tokenize()
+        private Token[] Tokenize()
         {
-            var tokens = new List<Tuple<TokenKind, string>>();
+            var tokens = new List<Token>();
             for (var p = 0; this.Text.Length > p; )
             {
                 // Skip character
@@ -83,41 +77,40 @@ namespace Compiler
                     p++;
                     continue;
                 }
-                //// Muliti-letter punctuator
-                //var mlp = this.Text.Substring(p, 2);
-                //if (ExistsKey(mlp))
-                //{
+                // // Muliti-letter punctuator
+                // var mlp = this.Text.Substring(p, 2);
+                // if (ExistsKey(mlp))
+                // {
                 //    var tk = ReverseReference(mlp);
                 //    tokens.Add(new Tuple<TokenKind, string>(tk, mlp));
                 //    p += 2;
                 //    continue;
-                //}
-                //// Single-letter punctuator
-                //if (ExistsKey(this.Text[p].ToString()))
-                //{
+                // }
+                // // Single-letter punctuator
+                // if (ExistsKey(this.Text[p].ToString()))
+                // {
                 //    var tk = ReverseReference(this.Text[p].ToString());
                 //    tokens.Add(new Tuple<TokenKind, string>(tk, this.Text[p].ToString()));
                 //    p++;
                 //    continue;
-                //}
+                // }
                 // Integer literal
                 var len = DigitLength(this.Text.Substring(p));
                 if (len > 0)
                 {
-                    tokens.Add(new Tuple<TokenKind, string>(TokenKind.TK_NUM, this.Text.Substring(p, len)));
+                    var token = new Token(TokenKind.TK_NUM, this.Text.Substring(p, len));
+                    tokens.Add(token);
                     p += len;
                     continue;
                 }
+
+                CompileError.Error("Couldn't tokenize.", true);
             }
 
             return tokens.ToArray();
         }
-
-        /// <summary>
-        /// Pass the next token kind with that token text.
-        /// </summary>
-        /// <returns>Token kind and token text pair.</returns>
-        public Tuple<TokenKind, string> NextToken()
+        
+        public Token NextToken()
         {
             var token = this.Tokens[this.Index];
             this.Index++;

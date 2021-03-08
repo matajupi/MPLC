@@ -82,6 +82,6 @@ class Assertion:
         print("OK")
 
 if __name__ == "__main__":
-    folder_path = "C:\\Users\\Kosuke Futamata\\source\\repos\\MPLC\\CompilerTests\\Test\\"
+    folder_path = "/mnt/c/Users/Kosuke Futamata/source/repos/mplc/test"
     assertion = Assertion(folder_path)
     assertion.assert_all()

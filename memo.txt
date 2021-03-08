@@ -3,3 +3,22 @@
 https://qiita.com/Nossa/items/67b29c496511026826c4
 
 コンパイラではアセンブルまで実行する。
+エラーは起こった場所からメソッド呼び出して出力（一度エラーが出てもコンパイルする仕様への変更を考えて）
+
+目標：Main -> コマンドライン引数の解析（Command line error） -> ソースコードのInput -> トークナイズ（Tokenize error） -> パース（Parse error）
+-> コードジェネレート（Generate error）(Parser or Visitor) -> アセンブラのOutput（終了 or 続行） -> アセンブル && 実行ファイルのOutput（AAssemble error） -> アセンブラファイルの削除
+エラー出力（外）
+Command Pattern, Interpreter Pattern
+
+リンクとかも考えるとContextは使いまわしが良い。
+
+トークナイザ、変数の管理などはContextにコンポジションさせておく
+
+トークナイズエラーとパースエラー、その他のエラーは分ける。
+Warningはまた後で
+
+第一段階：Main -> ソースコードのInput -> トークナイズ -> パース -> ジェネレート -> アセンブラのOutput（終了）
+エラー出力（外）
+・整数１つのコンパイル
+・四則演算
+・（）を付けた四則演算
