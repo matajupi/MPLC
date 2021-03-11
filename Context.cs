@@ -16,14 +16,16 @@ namespace mplc
         }
 
         /// <summary>
-        /// Consume one token.
+        /// Return current token and consume one.
         /// </summary>
-        public void AdvanceToken()
+        public Token NextToken()
         {
+            var retval = this.CurrentToken;
             if (this.Tokenizer.HasMoreToken())
                 this.CurrentToken = this.Tokenizer.NextToken();
             else
                 this.CurrentToken = null;
+            return retval;
         }
 
         /// <summary>
@@ -35,7 +37,7 @@ namespace mplc
             if (this.CurrentToken.TokenKind != tokenKind)
                 return false;
 
-            this.AdvanceToken();
+            this.NextToken();
             return true;
         }
 
@@ -46,13 +48,12 @@ namespace mplc
         /// </summary>
         public bool Consume(TokenKind tokenKind, out Token token)
         {
-            if (this.CurrentToken.TokenKind != tokenKind)
+            if (this.CurrentToken == null || this.CurrentToken.TokenKind != tokenKind)
             {
                 token = null;
                 return false;
             }
-            token = this.CurrentToken;
-            this.AdvanceToken();
+            token = this.NextToken();
             return true;
         }
 
@@ -64,7 +65,7 @@ namespace mplc
         {
             if (this.CurrentToken.TokenKind != tokenKind)
                 CompileError.Error("Expect Error", true);
-            this.AdvanceToken();
+            this.NextToken();
         }
 
         /// <summary>
@@ -75,8 +76,7 @@ namespace mplc
         {
             if (this.CurrentToken.TokenKind != TokenKind.TK_NUM)
                 CompileError.Error("Expect number", true);
-            var val = int.Parse(this.CurrentToken.TokenString);
-            this.AdvanceToken();
+            var val = int.Parse(this.NextToken().TokenString);
             return val;
         }
     }

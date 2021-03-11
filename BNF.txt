@@ -4,30 +4,115 @@
 <method>            ::= <accessor>? <prefix_modifier>* "method" <ident> "(" ("var" <ident> ":" <type>)* ")" ":" <type> <block>
 <member_variable>   ::= <accessor>? <prefix_modifier>* "var" <ident> ":" <type> ("=" <expression>)? ";"
 
-public static method Main(var args: string[]): void {
 
+public class Program {
+    public property Name ({ get; }, { private set; }): string;
+    public property Age ({ get; }, { private set; }): int;
+
+    public static readonly CONST_VAR: int = 1000;
+
+    static method Main(var args: string[]): void {
+        var a: int = 3;
+        var program = new Program("hello", a);
+        System.Std.WriteLine(program.Name.get());
+        System.Std.WriteLine(program.Age.get());
+    }
+
+    public constructor(var name: string, var age: int) {
+        this.Name.set(name);
+        this.Age.set(age);
+    }
+
+    public dynamic method GetData(): (string, int) {
+        return (this.Name.get(), this.Age.get());
+    }
 }
 
-public dynamic method Add(var a: int, var b: int): int {
-
+public interface IComparable {
+    method CompareTo(var other: IComparable): int;
 }
 
-public dynamic class Person : Animal, ITokeAble {
-
+public abstract class Base {
+    public abstract method Move(var distance: int): void;
 }
 
-public dynamic method GetPersonList(): Person[] {
+public class Sub : Base, IComparable {
+    public final override method Move(var distance: int): void {
 
+    }
+
+    public method CompareTo(var other: IComparable): int {
+        return 0;
+    }
 }
 
-public dynamic method GetPersonByName(var name: string): Person {
+pub class Program:
+    pub prop Name(get; pri set;): string
+    pub prop Age(get; pri set;): int
 
-}
+    pub stat val CONST_VAR: int = 1000
 
-public constructor(var name: string, var age: int) {
+    stat met Main(var args: string[]): void:
+        var a: int = 3, var name: string = "Kosuke"
+        var program = new Program(name, a)
+        System.Std.WriteLine(program.Name)
+        System.Std.WriteLine(program.Age)
+    end
 
-}
+    pub const(name: string, age: int):
+        Name = name
+        Age = age
+    end
 
-public destructor {
+    pub met GetData(): (string, int):
+        return (this.Name, this.Age)
+    end
+end
 
-}
+pub inter IComparable:
+    met CompareTo(other: IComparable): int
+end
+
+pub abst class Base:
+    pub abst met Move(distance: int): void
+end
+
+pub class Sub(Base, IComparable):
+    pub fin met Move(distance: int): void:
+        pass
+    end
+
+    pub met CompareTo(other: IComparable): int:
+        return 0
+    end
+end
+
+pub class Generic<T>(IComparable):
+    pass
+end
+
+
+<program> ::= <class> | <interface>
+<class> ::= <accessor>? <prefix>* "class" <ident> ("<" <ident>* ">")? ("(" <ident>* ")")? <classblock>
+<accessor> ::= "pub" | "pri" | "prt" | "itn"
+<prefix> ::= "stat" | "abst" | "fin"
+<classblock> ::= ":" (<method> | <property> | <membervar> | <constructor>)* "end"
+<method> ::= <accessor>? <prefix>* "met" <ident> "(" ("var"? <ident> ":" <type>)* ")" ":" <type> <block>
+<block> ::= ":" <statement>* "end"
+<statement> ::= <expression>
+            | <if>
+            | <for>
+            | <while>
+            | <return>
+
+<expression> ::= <assign>
+<assign> ::= <equality> ("=" <equality>)?
+<equality> ::= <relational> ("||" <relational> | "&&" <relational>)*
+<relational> ::= <calc> ("==" <calc> | "!=" <calc> | "<" <calc> | "<=" <calc> | ">" <calc> | ">=" <calc>)?
+<calc> ::= <unary> ("+" <unary> | "-" <unary> | "*" <unary> | "/" <unary> | "&" <unary> | "|" <unary> | "%" <unary> | "^" <unary>)*
+
+
+// ==========================================
+
+<addsub> ::= <num> ("+" <num> | "-" <num>)*
+<num> ::= ("0"~"9")*

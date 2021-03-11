@@ -18,14 +18,14 @@ namespace mplc
 
             var code = args[0];
             var context = new Context(code);
-            var node = new NumberNode();
+            var node = new AddNode();
             node.Parse(context);
-            var asm = new Assembly();
+            var asm = new AssemblyCode();
+            asm.Add("main:");
             node.Generate(asm);
-            foreach (var line in asm.Code)
-            {
-                Console.WriteLine(line);
-            }
+            asm.Add("    pop rax");
+            asm.Add("    ret");
+            asm.PutAll();
         }
     }
 }

@@ -17,6 +17,9 @@ namespace mplc
             TK_EQUAL,
             TK_RETURN,
             TK_NUM,
+            TK_PLUS,
+            TK_MINUS,
+            TK_EOF,
         }
 
         public static IReadOnlyDictionary<TokenKind, string> TokenString = new Dictionary<TokenKind, string>()
@@ -24,6 +27,8 @@ namespace mplc
             { TokenKind.TK_EQUAL, "=" },
             { TokenKind.TK_RETURN, "return"},
             { TokenKind.TK_NUM , "num" },
+            { TokenKind.TK_PLUS, "+"},
+            { TokenKind.TK_MINUS, "-"},
         };
 
         public static char[] SkipChars = new char[] { ' ', '\n', '\t', '\r', '\f' };
@@ -86,14 +91,14 @@ namespace mplc
                 //    p += 2;
                 //    continue;
                 // }
-                // // Single-letter punctuator
-                // if (ExistsKey(this.Text[p].ToString()))
-                // {
-                //    var tk = ReverseReference(this.Text[p].ToString());
-                //    tokens.Add(new Tuple<TokenKind, string>(tk, this.Text[p].ToString()));
-                //    p++;
-                //    continue;
-                // }
+                // Single-letter punctuator
+                if (ExistsKey(this.Text[p].ToString()))
+                {
+                   var tk = ReverseReference(this.Text[p].ToString());
+                   tokens.Add(new Token(tk, this.Text[p].ToString()));
+                   p++;
+                   continue;
+                }
                 // Integer literal
                 var len = DigitLength(this.Text.Substring(p));
                 if (len > 0)
@@ -107,6 +112,7 @@ namespace mplc
                 CompileError.Error("Couldn't tokenize.", true);
             }
 
+            tokens.Add(new Token(TokenKind.TK_EOF, "EOF"));
             return tokens.ToArray();
         }
         

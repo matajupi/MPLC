@@ -4,6 +4,6 @@ namespace mplc
 {
     abstract class AssemblyGenerator
     {
-        public abstract void Generate(Assembly asm);
+        public abstract void Generate(AssemblyCode asm);
     }
 }

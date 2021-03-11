@@ -12,11 +12,9 @@ namespace mplc
             this.Number = context.ExpectNumber();
         }
 
-        public override void Generate(Assembly asm)
+        public override void Generate(AssemblyCode asm)
         {
-            asm.Code.Add("main:");
-            asm.Code.Add($"    mov rax, {this.Number}");
-            asm.Code.Add("    ret");
+            asm.Add($"    push {this.Number}");
         }
     }
 }
