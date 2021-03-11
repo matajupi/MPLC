@@ -21,6 +21,8 @@ namespace mplc
             MINUS,
             ASTERISK,
             SLASH,
+            LEFT_PAREN,
+            RIGHT_PAREN,
             EOF,
         }
 
@@ -33,6 +35,8 @@ namespace mplc
             { TokenKind.MINUS, "-"},
             { TokenKind.ASTERISK, "*" },
             { TokenKind.SLASH, "/" },
+            { TokenKind.LEFT_PAREN, "(" },
+            { TokenKind.RIGHT_PAREN, ")"},
         };
 
         public static char[] SkipChars = new char[] { ' ', '\n', '\t', '\r', '\f' };

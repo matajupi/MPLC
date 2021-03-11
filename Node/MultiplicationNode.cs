@@ -10,7 +10,7 @@ namespace mplc
 
         public override void Parse(Context context)
         {
-            this.LeftSide = new NumberNode();
+            this.LeftSide = new PrimaryNode();
             this.LeftSide.Parse(context);
 
             this.RightSides = new List<Tuple<Tokenizer.TokenKind, Node>>();
@@ -18,7 +18,7 @@ namespace mplc
             while (context.Consume(Tokenizer.TokenKind.ASTERISK, out token)
                 || context.Consume(Tokenizer.TokenKind.SLASH, out token))
             {
-                var node = new NumberNode();
+                var node = new PrimaryNode();
                 node.Parse(context);
                 this.RightSides.Add(
                     new Tuple<Tokenizer.TokenKind, Node>(token.TokenKind, node)
