@@ -114,5 +114,7 @@ end
 
 // ==========================================
 
-<addsub> ::= <num> ("+" <num> | "-" <num>)*
-<num> ::= ("0"~"9")*
+
+<addition> ::= <multiplication> ("+" <multiplication> | "-" <multiplication>)*
+<multiplication> ::= <number> ("*" <number> | "/" <number>)*
+<number> ::= ("0"~"9")*

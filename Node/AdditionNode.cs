@@ -3,24 +3,26 @@ using System.Collections.Generic;
 
 namespace mplc
 {
-    class AddNode : Node
+    class AdditionNode : Node
     {
-        private NumberNode LeftSide;
-        private List<Tuple<Tokenizer.TokenKind, NumberNode>> RightSides;
+        private Node LeftSide;
+        private List<Tuple<Tokenizer.TokenKind, Node>> RightSides;
 
         public override void Parse(Context context)
         {
-            this.LeftSide = new NumberNode();
+            this.LeftSide = new MultiplicationNode();
             this.LeftSide.Parse(context);
 
-            this.RightSides = new List<Tuple<Tokenizer.TokenKind, NumberNode>>();
+            this.RightSides = new List<Tuple<Tokenizer.TokenKind, Node>>();
             Token token;
-            while (context.Consume(Tokenizer.TokenKind.TK_PLUS, out token)
-                || context.Consume(Tokenizer.TokenKind.TK_MINUS, out token))
+            while (context.Consume(Tokenizer.TokenKind.PLUS, out token)
+                || context.Consume(Tokenizer.TokenKind.MINUS, out token))
             {
-                var node = new NumberNode();
+                var node = new MultiplicationNode();
                 node.Parse(context);
-                this.RightSides.Add(new Tuple<Tokenizer.TokenKind, NumberNode>(token.TokenKind, node));
+                this.RightSides.Add(
+                    new Tuple<Tokenizer.TokenKind, Node>(token.TokenKind, node)
+                );
             }
         }
 
@@ -37,10 +39,10 @@ namespace mplc
 
                 switch (pair.Item1)
                 {
-                    case Tokenizer.TokenKind.TK_PLUS:
+                    case Tokenizer.TokenKind.PLUS:
                     asm.Add("    add rax, rdi");
                     break;
-                    case Tokenizer.TokenKind.TK_MINUS:
+                    case Tokenizer.TokenKind.MINUS:
                     asm.Add("    sub rax, rdi");
                     break;
                 }

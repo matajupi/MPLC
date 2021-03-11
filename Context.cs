@@ -74,7 +74,7 @@ namespace mplc
         /// </summary>
         public int ExpectNumber()
         {
-            if (this.CurrentToken.TokenKind != TokenKind.TK_NUM)
+            if (this.CurrentToken.TokenKind != TokenKind.NUM)
                 CompileError.Error("Expect number", true);
             var val = int.Parse(this.NextToken().TokenString);
             return val;

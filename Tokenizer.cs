@@ -14,21 +14,25 @@ namespace mplc
         /// </summary>
         public enum TokenKind
         {
-            TK_EQUAL,
-            TK_RETURN,
-            TK_NUM,
-            TK_PLUS,
-            TK_MINUS,
-            TK_EOF,
+            EQUAL,
+            RETURN,
+            NUM,
+            PLUS,
+            MINUS,
+            ASTERISK,
+            SLASH,
+            EOF,
         }
 
         public static IReadOnlyDictionary<TokenKind, string> TokenString = new Dictionary<TokenKind, string>()
         {
-            { TokenKind.TK_EQUAL, "=" },
-            { TokenKind.TK_RETURN, "return"},
-            { TokenKind.TK_NUM , "num" },
-            { TokenKind.TK_PLUS, "+"},
-            { TokenKind.TK_MINUS, "-"},
+            { TokenKind.EQUAL, "=" },
+            { TokenKind.RETURN, "return"},
+            { TokenKind.NUM , "num" },
+            { TokenKind.PLUS, "+"},
+            { TokenKind.MINUS, "-"},
+            { TokenKind.ASTERISK, "*" },
+            { TokenKind.SLASH, "/" },
         };
 
         public static char[] SkipChars = new char[] { ' ', '\n', '\t', '\r', '\f' };
@@ -103,7 +107,7 @@ namespace mplc
                 var len = DigitLength(this.Text.Substring(p));
                 if (len > 0)
                 {
-                    var token = new Token(TokenKind.TK_NUM, this.Text.Substring(p, len));
+                    var token = new Token(TokenKind.NUM, this.Text.Substring(p, len));
                     tokens.Add(token);
                     p += len;
                     continue;
@@ -112,7 +116,7 @@ namespace mplc
                 CompileError.Error("Couldn't tokenize.", true);
             }
 
-            tokens.Add(new Token(TokenKind.TK_EOF, "EOF"));
+            tokens.Add(new Token(TokenKind.EOF, "EOF"));
             return tokens.ToArray();
         }
         
