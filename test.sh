@@ -3,7 +3,8 @@ assert() {
   expected="$1"
   input="$2"
 
-  dotnet run "$input" > tmp.s
+  ./bin/Debug/net5.0/linux-x64/publish/mplc "$input" > tmp.s
+  # dotnet run "$input" > tmp.s
   cc -o tmp tmp.s
   ./tmp
   actual="$?"
