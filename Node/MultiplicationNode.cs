@@ -5,8 +5,8 @@ namespace mplc
 {
     class MultiplicationNode : Node
     {
-        public Node LeftSide;
-        public List<Tuple<Tokenizer.TokenKind, Node>> RightSides;
+        public Node LeftSide { get; set; }
+        public List<Tuple<Tokenizer.TokenKind, Node>> RightSides { get; set; }
 
         public MultiplicationNode()
         => this.RightSides = new List<Tuple<Tokenizer.TokenKind, Node>>();

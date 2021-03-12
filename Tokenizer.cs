@@ -23,6 +23,12 @@ namespace mplc
             SLASH,
             LEFT_PAREN,
             RIGHT_PAREN,
+            LESS,
+            GREATER,
+            EQUAL_EQUAL,
+            EXCLAMATION_EQUAL,
+            LESS_EQUAL,
+            GREATER_EQUAL,
             EOF,
         }
 
@@ -37,6 +43,12 @@ namespace mplc
             { TokenKind.SLASH, "/" },
             { TokenKind.LEFT_PAREN, "(" },
             { TokenKind.RIGHT_PAREN, ")"},
+            { TokenKind.LESS, "<" },
+            { TokenKind.GREATER, ">" },
+            { TokenKind.EQUAL_EQUAL, "==" },
+            { TokenKind.EXCLAMATION_EQUAL, "!=" },
+            { TokenKind.LESS_EQUAL, "<=" },
+            { TokenKind.GREATER_EQUAL, ">=" },
         };
 
         public static char[] SkipChars = new char[] { ' ', '\n', '\t', '\r', '\f' };
@@ -90,15 +102,18 @@ namespace mplc
                     p++;
                     continue;
                 }
-                // // Muliti-letter punctuator
-                // var mlp = this.Text.Substring(p, 2);
-                // if (ExistsKey(mlp))
-                // {
-                //    var tk = ReverseReference(mlp);
-                //    tokens.Add(new Tuple<TokenKind, string>(tk, mlp));
-                //    p += 2;
-                //    continue;
-                // }
+                // Muliti-letter punctuator
+                if (this.Text.Length - p >= 2)
+                {
+                    var mlp = this.Text.Substring(p, 2);
+                    if (ExistsKey(mlp))
+                    {
+                        var tk = ReverseReference(mlp);
+                        tokens.Add(new Token(tk, mlp));
+                        p += 2;
+                        continue;
+                    }
+                }
                 // Single-letter punctuator
                 if (ExistsKey(this.Text[p].ToString()))
                 {

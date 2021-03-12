@@ -18,7 +18,7 @@ namespace mplc
 
             var code = args[0];
             var context = new Context(code);
-            var node = new AdditionNode();
+            var node = new ExpressionNode();
             node.Parse(context);
             var asm = new AssemblyCode();
             asm.Add("main:");

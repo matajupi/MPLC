@@ -5,7 +5,7 @@ namespace mplc
     // 名前は仮(IntegerNodeとかにする)
     class NumberNode : Node
     {
-        public int Number;
+        public int Number { get; set; }
 
         public override void Parse(Context context)
         {

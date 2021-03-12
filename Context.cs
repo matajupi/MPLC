@@ -24,7 +24,7 @@ namespace mplc
             if (this.Tokenizer.HasMoreToken())
                 this.CurrentToken = this.Tokenizer.NextToken();
             else
-                this.CurrentToken = null;
+                this.CurrentToken = default;
             return retval;
         }
 
@@ -48,9 +48,9 @@ namespace mplc
         /// </summary>
         public bool Consume(TokenKind tokenKind, out Token token)
         {
-            if (this.CurrentToken == null || this.CurrentToken.TokenKind != tokenKind)
+            if (this.CurrentToken == default || this.CurrentToken.TokenKind != tokenKind)
             {
-                token = null;
+                token = default;
                 return false;
             }
             token = this.NextToken();

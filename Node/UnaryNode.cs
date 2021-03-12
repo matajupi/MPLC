@@ -5,7 +5,7 @@ namespace mplc
 {
     class UnaryNode : Node
     {
-        public Node Node;
+        public Node Node { get; set; }
 
         public override void Parse(Context context)
         {
