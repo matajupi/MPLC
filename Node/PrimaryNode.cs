@@ -4,7 +4,7 @@ namespace mplc
 {
     class PrimaryNode : Node
     {
-        private Node Node;
+        public Node Node;
 
         public override void Parse(Context context)
         {
@@ -13,12 +13,10 @@ namespace mplc
                 this.Node = new AdditionNode();
                 this.Node.Parse(context);
                 context.Expect(Tokenizer.TokenKind.RIGHT_PAREN);
+                return;
             }
-            else
-            {
-                this.Node = new NumberNode();
-                this.Node.Parse(context);
-            }
+            this.Node = new NumberNode();
+            this.Node.Parse(context);
         }
 
         public override void Generate(AssemblyCode asm)

@@ -5,15 +5,17 @@ namespace mplc
 {
     class AdditionNode : Node
     {
-        private Node LeftSide;
-        private List<Tuple<Tokenizer.TokenKind, Node>> RightSides;
+        public Node LeftSide;
+        public List<Tuple<Tokenizer.TokenKind, Node>> RightSides;
+
+        public AdditionNode() 
+        => this.RightSides = new List<Tuple<Tokenizer.TokenKind, Node>>();
 
         public override void Parse(Context context)
         {
             this.LeftSide = new MultiplicationNode();
             this.LeftSide.Parse(context);
 
-            this.RightSides = new List<Tuple<Tokenizer.TokenKind, Node>>();
             Token token;
             while (context.Consume(Tokenizer.TokenKind.PLUS, out token)
                 || context.Consume(Tokenizer.TokenKind.MINUS, out token))
