@@ -36,21 +36,19 @@ namespace mplc
             {
                 pair.Item2.Generate(asm);
 
-                asm.Add("    pop rdi");
-                asm.Add("    pop rax");
-
-                switch (pair.Item1)
+                asm.BinaryOperation(() => 
                 {
-                    case Tokenizer.TokenKind.ASTERISK:
-                    asm.Add("    imul rax, rdi");
-                    break;
-                    case Tokenizer.TokenKind.SLASH:
-                    asm.Add("    cqo");
-                    asm.Add("    idiv rdi");
-                    break;
-                }
-
-                asm.Add("    push rax");
+                    switch (pair.Item1)
+                    {
+                        case Tokenizer.TokenKind.ASTERISK:
+                        asm.Add("    imul rax, rdi");
+                        break;
+                        case Tokenizer.TokenKind.SLASH:
+                        asm.Add("    cqo");
+                        asm.Add("    idiv rdi");
+                        break;
+                    }
+                });
             }
         }
     }

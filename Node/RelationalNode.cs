@@ -42,20 +42,21 @@ namespace mplc
             if (this.RightSide != default && this.Operator != default)
             {
                 this.RightSide.Generate(asm);
-                asm.Add("    pop rdi");
-                asm.Add("    pop rax");
-                asm.Add("    cmp rax, rdi");
-                switch (this.Operator)
+
+                asm.BinaryOperation(() => 
                 {
-                    case Tokenizer.TokenKind.LESS:
-                    asm.Add("    setl al");
-                    break;
-                    case Tokenizer.TokenKind.LESS_EQUAL:
-                    asm.Add("    setle al");
-                    break;
-                }
-                asm.Add("    movzb rax, al");
-                asm.Add("    push rax");
+                    asm.Add("    cmp rax, rdi");
+                    switch (this.Operator)
+                    {
+                        case Tokenizer.TokenKind.LESS:
+                        asm.Add("    setl al");
+                        break;
+                        case Tokenizer.TokenKind.LESS_EQUAL:
+                        asm.Add("    setle al");
+                        break;
+                    }
+                    asm.Add("    movzb rax, al");
+                });
             }
         }
     }

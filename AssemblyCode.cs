@@ -22,6 +22,14 @@ namespace mplc
 
         public void Add(string line) => this.Code.Add(line);
 
+        public void BinaryOperation(Action operateAction) 
+        {
+            this.Add("    pop rdi");
+            this.Add("    pop rax");
+            operateAction();
+            this.Add("    push rax");
+        }
+
         public void OutputFile(string path)
         {
             using (var sw = new StreamWriter(path))
