@@ -22,3 +22,9 @@ Warningはまた後で
 ・整数１つのコンパイル
 ・四則演算
 ・（）を付けた四則演算
+
+GAS記法
+http://capm-network.com/?tag=GAS_%E5%9F%BA%E6%9C%AC%E6%96%87%E6%B3%95
+Symbol name
+https://www.benricho.org/symbol/kigou_11.html
+https://www.mztn.org/lxasm64/amd07_mov.html
