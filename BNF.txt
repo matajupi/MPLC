@@ -114,8 +114,9 @@ end
 
 // ==========================================
 
-<expression> ::= <equality>
-<equality> ::= <relational> ( "==" <relational> | "!=" <relational>)?
+<expression> ::= <assign>
+<assign> ::= <equality> ("=" <equality>)?
+<equality> ::= <relational> ("==" <relational> | "!=" <relational>)?
 <relational> ::= <addition> (
     "<" <addition>
     | "<=" <addition>
@@ -126,4 +127,4 @@ end
 <multiplication> ::= <unary> ("*" <unary> | "/" <unary>)*
 <unary> ::= ("+" | "-")? <primary>
 <primary> ::= <number> | "(" <expression> ")"
-<number> ::= ("0"~"9")*
+<number> ::= ("0" ~ "9")*
