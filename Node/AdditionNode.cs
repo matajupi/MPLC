@@ -28,27 +28,9 @@ namespace mplc
             }
         }
 
-        public override void Generate(AssemblyCode asm)
+        public override void Accept(AssemblyGenerateVisitor v)
         {
-            this.LeftSide.Generate(asm);
-
-            foreach (var pair in this.RightSides)
-            {
-                pair.Item2.Generate(asm);
-
-                asm.BinaryOperation(() =>
-                {
-                    switch (pair.Item1)
-                    {
-                        case Tokenizer.TokenKind.PLUS:
-                        asm.Add("    add rax, rdi");
-                        break;
-                        case Tokenizer.TokenKind.MINUS:
-                        asm.Add("    sub rax, rdi");
-                        break;
-                    }
-                });
-            }
+            v.Visit(this);
         }
     }
 }

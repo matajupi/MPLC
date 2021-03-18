@@ -2,8 +2,7 @@ using System;
 
 namespace mplc
 {
-    // 名前は仮(IntegerNodeとかにする)
-    class NumberNode : Node
+    class NumericLiteralNode : Node
     {
         public int Number { get; set; }
 
@@ -12,9 +11,9 @@ namespace mplc
             this.Number = context.ExpectNumber();
         }
 
-        public override void Generate(AssemblyCode asm)
+        public override void Accept(AssemblyGenerateVisitor v)
         {
-            asm.Add($"    push {this.Number}");
+            v.Visit(this);
         }
     }
 }

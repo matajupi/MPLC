@@ -5,14 +5,14 @@ namespace mplc
 {
     class UnaryNode : Node
     {
-        public Node Node { get; set; }
+        public Node PrimaryNode { get; set; }
 
         public override void Parse(Context context)
         {
             if (context.Consume(Tokenizer.TokenKind.MINUS))
             {
                 var subZero = new AdditionNode();
-                var zero = new NumberNode();
+                var zero = new NumericLiteralNode();
                 zero.Number = 0;
                 subZero.LeftSide = zero;
                 var right = new PrimaryNode();
@@ -20,17 +20,17 @@ namespace mplc
                 subZero.RightSides.Add(
                     new Tuple<Tokenizer.TokenKind, Node>(Tokenizer.TokenKind.MINUS, right)
                 );
-                this.Node = subZero;
+                this.PrimaryNode = subZero;
                 return;
             }
             context.Consume(Tokenizer.TokenKind.PLUS);
-            this.Node = new PrimaryNode();
-            this.Node.Parse(context);
+            this.PrimaryNode = new PrimaryNode();
+            this.PrimaryNode.Parse(context);
         }
 
-        public override void Generate(AssemblyCode asm)
+        public override void Accept(AssemblyGenerateVisitor v)
         {
-            this.Node.Generate(asm);
+            v.Visit(this);
         }
     }
 }

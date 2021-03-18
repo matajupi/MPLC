@@ -36,28 +36,9 @@ namespace mplc
             }
         }
 
-        public override void Generate(AssemblyCode asm)
+        public override void Accept(AssemblyGenerateVisitor v)
         {
-            this.LeftSide.Generate(asm);
-            if (this.RightSide != default && this.Operator != default)
-            {
-                this.RightSide.Generate(asm);
-
-                asm.BinaryOperation(() => 
-                {
-                    asm.Add("    cmp rax, rdi");
-                    switch (this.Operator)
-                    {
-                        case Tokenizer.TokenKind.LESS:
-                        asm.Add("    setl al");
-                        break;
-                        case Tokenizer.TokenKind.LESS_EQUAL:
-                        asm.Add("    setle al");
-                        break;
-                    }
-                    asm.Add("    movzb rax, al");
-                });
-            }
+            v.Visit(this);
         }
     }
 }

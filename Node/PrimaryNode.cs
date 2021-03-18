@@ -15,13 +15,20 @@ namespace mplc
                 context.Expect(Tokenizer.TokenKind.RIGHT_PAREN);
                 return;
             }
-            this.Node = new NumberNode();
+            if (context.Consume(Tokenizer.TokenKind.IDENTIFIER, out Token token))
+            {
+                var lvar = new LocalVariableNode();
+                lvar.Parse(context, token);
+                this.Node = lvar;
+                return;
+            }
+            this.Node = new NumericLiteralNode();
             this.Node.Parse(context);
         }
 
-        public override void Generate(AssemblyCode asm)
+        public override void Accept(AssemblyGenerateVisitor v)
         {
-            this.Node.Generate(asm);
+            v.Visit(this);
         }
     }
 }

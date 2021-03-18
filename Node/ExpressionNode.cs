@@ -4,17 +4,17 @@ namespace mplc
 {
     class ExpressionNode : Node
     {
-        public Node Node { get; set; }
+        public Node AssignNode { get; set; }
 
         public override void Parse(Context context)
         {
-            this.Node = new EqualityNode();
-            this.Node.Parse(context);
+            this.AssignNode = new AssignNode();
+            this.AssignNode.Parse(context);
         }
 
-        public override void Generate(AssemblyCode asm)
+        public override void Accept(AssemblyGenerateVisitor v)
         {
-            this.Node.Generate(asm);
+            v.Visit(this);
         }
     }
 }

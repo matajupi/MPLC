@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace mplc
 {
@@ -16,7 +17,7 @@ namespace mplc
         {
             EQUAL,
             RETURN,
-            NUM,
+            NUMERIC,
             PLUS,
             MINUS,
             ASTERISK,
@@ -29,6 +30,8 @@ namespace mplc
             EXCLAMATION_EQUAL,
             LESS_EQUAL,
             GREATER_EQUAL,
+            IDENTIFIER,
+            SEMICOLON,
             EOF,
         }
 
@@ -36,7 +39,7 @@ namespace mplc
         {
             { TokenKind.EQUAL, "=" },
             { TokenKind.RETURN, "return"},
-            { TokenKind.NUM , "num" },
+            { TokenKind.NUMERIC , "numeric" },
             { TokenKind.PLUS, "+"},
             { TokenKind.MINUS, "-"},
             { TokenKind.ASTERISK, "*" },
@@ -49,6 +52,8 @@ namespace mplc
             { TokenKind.EXCLAMATION_EQUAL, "!=" },
             { TokenKind.LESS_EQUAL, "<=" },
             { TokenKind.GREATER_EQUAL, ">=" },
+            { TokenKind.IDENTIFIER, "identifier" },
+            { TokenKind.SEMICOLON, ";" },
         };
 
         public static char[] SkipChars = new char[] { ' ', '\n', '\t', '\r', '\f' };
@@ -126,9 +131,19 @@ namespace mplc
                 var len = DigitLength(this.Text.Substring(p));
                 if (len > 0)
                 {
-                    var token = new Token(TokenKind.NUM, this.Text.Substring(p, len));
+                    var token = new Token(TokenKind.NUMERIC, this.Text.Substring(p, len));
                     tokens.Add(token);
                     p += len;
+                    continue;
+                }
+                // Identifier
+                if (IsAllowedCharacter(this.Text[p]))
+                {
+                    var builder = new StringBuilder();
+                    for (; IsAllowedCharacter(this.Text[p]); p++)
+                        builder.Append(this.Text[p]);
+                    var token = new Token(TokenKind.IDENTIFIER, builder.ToString());
+                    tokens.Add(token);
                     continue;
                 }
 
@@ -138,6 +153,12 @@ namespace mplc
             tokens.Add(new Token(TokenKind.EOF, "EOF"));
             return tokens.ToArray();
         }
+
+        private bool IsAllowedCharacter(char c)
+        => ('a' <= c && c <= 'z')
+        || ('A' <= c && c <= 'Z')
+        || ('0' <= c && c <= '9')
+        || (c == '_');
         
         public Token NextToken()
         {

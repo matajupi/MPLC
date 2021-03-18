@@ -2,22 +2,18 @@ using System;
 
 namespace mplc
 {
-    class EqualityNode : Node
+    class AssignNode : Node
     {
         public Node LeftSide { get; set; }
-        public Tokenizer.TokenKind Operator { get; set; }
         public Node RightSide { get; set; }
 
         public override void Parse(Context context)
         {
-            this.LeftSide = new RelationalNode();
+            this.LeftSide = new EqualityNode();
             this.LeftSide.Parse(context);
-            Token token;
-            if (context.Consume(Tokenizer.TokenKind.EQUAL_EQUAL, out token)
-            || context.Consume(Tokenizer.TokenKind.EXCLAMATION_EQUAL, out token))
+            if (context.Consume(Tokenizer.TokenKind.EQUAL))
             {
-                this.Operator = token.TokenKind;
-                this.RightSide = new RelationalNode();
+                this.RightSide = new EqualityNode();
                 this.RightSide.Parse(context);
             }
         }

@@ -21,24 +21,25 @@ namespace mplc
             var node = new ExpressionNode();
             node.Parse(context);
 
-            var asm = new AssemblyCode();
-            asm.Add("main:");
+            var gen = new AssemblyGeneratorFactory().Create<X8664GenerateVisitor>();
+
+            gen.Add("main:");
 
             // Prologue
-            asm.Add("    push rbp");
-            asm.Add("    mov rbp, rsp");
+            gen.Add("    push rbp");
+            gen.Add("    mov rbp, rsp");
             // ここで変数分だけrspを引く(初期化をここでしてしまう)
             // asm.Add("    sub rsp, 16");
 
-            node.Generate(asm);
+            gen.Generate(node);
 
             // Epilogue
-            asm.Add("    pop rax");
-            asm.Add("    mov rsp, rbp");
-            asm.Add("    pop rbp");
-            asm.Add("    ret");
+            gen.Add("    pop rax");
+            gen.Add("    mov rsp, rbp");
+            gen.Add("    pop rbp");
+            gen.Add("    ret");
 
-            asm.PutAll();
+            gen.PutAll();
         }
     }
 }

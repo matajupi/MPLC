@@ -114,6 +114,8 @@ end
 
 // ==========================================
 
+<program> ::= <statement>*
+<statement> ::= <expression> ";"
 <expression> ::= <assign>
 <assign> ::= <equality> ("=" <equality>)?
 <equality> ::= <relational> ("==" <relational> | "!=" <relational>)?
@@ -126,5 +128,6 @@ end
 <addition> ::= <multiplication> ("+" <multiplication> | "-" <multiplication>)*
 <multiplication> ::= <unary> ("*" <unary> | "/" <unary>)*
 <unary> ::= ("+" | "-")? <primary>
-<primary> ::= <number> | "(" <expression> ")"
-<number> ::= ("0" ~ "9")*
+<primary> ::= <numericliteral> | <localvariable> | "(" <expression> ")"
+<numericliteral> ::= ("0" ~ "9")*
+<localvariable> ::= ("a" ~ "z" | "A" ~ "Z" | "0" ~ "9" | "_")*
