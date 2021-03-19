@@ -7,9 +7,9 @@ namespace mplc
 {
     class Context
     {
-        private Tokenizer Tokenizer;
+        public Tokenizer Tokenizer { get; private set; }
         public Token CurrentToken { get; private set; }
-
+        public int CurrentTokenIndex { get { return this.Tokenizer.Index - 1; } }
         public List<LocalVariable> LocalVariables { get; set; }
         
         public Context(string code)
@@ -84,6 +84,16 @@ namespace mplc
             var val = int.Parse(this.CurrentToken.TokenString);
             this.AdvanceToken();
             return val;
+        }
+
+        /// <summary>
+        /// Returns the token of the specified index, if it exists.
+        /// Otherwise returns default.
+        /// </summary>
+        public Token GetTokenOrDefaultAt(int index) 
+        {
+            if (index < this.Tokenizer.Tokens.Length) return this.Tokenizer.Tokens[index];
+            else return default;
         }
 
         /// <summary>

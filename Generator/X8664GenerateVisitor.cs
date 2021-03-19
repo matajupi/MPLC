@@ -36,20 +36,17 @@ namespace mplc
 
         public override void Visit(AssignNode node)
         {
-            node.LeftSide.Accept(this);
-            if (node.RightSide != default)
+            if (node.LeftSide is LocalVariableNode && node.RightSide != default)
             {
-                for (var i = 0; 3 > i; i++)
-                    this.Code.RemoveAt(this.Code.Count - 1);           
-
+                this.ComputeLocalVariableAddress(node.LeftSide as LocalVariableNode);
                 node.RightSide.Accept(this);
-
                 this.Add("   pop rdi");
                 this.Add("   pop rax");
                 this.Add("   mov [rax], rdi");
                 this.Add("   push rdi");
                 return;
             }
+            node.LeftSide.Accept(this);
         }
 
         public override void Visit(EqualityNode node)
