@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace mplc
 {
@@ -18,18 +17,10 @@ namespace mplc
 
             var code = args[0];
             var context = new Context(code);
-            var node = new ExpressionNode();
+            var node = new ProgramNode();
             node.Parse(context);
 
             var gen = new AssemblyGeneratorFactory().Create<X8664GenerateVisitor>();
-
-            gen.Add("main:");
-
-            // Prologue
-            gen.Add("    push rbp");
-            gen.Add("    mov rbp, rsp");
-            // ここで変数分だけrspを引く(初期化をここでしてしまう)
-            // asm.Add("    sub rsp, 16");
 
             gen.Generate(node);
 

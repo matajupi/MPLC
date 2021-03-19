@@ -137,10 +137,10 @@ namespace mplc
                     continue;
                 }
                 // Identifier
-                if (IsAllowedCharacter(this.Text[p]))
+                if (this.IsAllowedCharacter(this.Text[p]))
                 {
                     var builder = new StringBuilder();
-                    for (; IsAllowedCharacter(this.Text[p]); p++)
+                    for (; this.IsAllowedCharacter(this.Text[p]); p++)
                         builder.Append(this.Text[p]);
                     var token = new Token(TokenKind.IDENTIFIER, builder.ToString());
                     tokens.Add(token);
@@ -166,7 +166,5 @@ namespace mplc
             this.Index++;
             return token;
         }
-
-        public bool HasMoreToken() => this.Tokens.Length > this.Index;
     }
 }

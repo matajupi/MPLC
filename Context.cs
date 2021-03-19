@@ -18,24 +18,20 @@ namespace mplc
             this.CurrentToken = this.Tokenizer.NextToken();
             // TODO Later: Change Place
             this.LocalVariables = new List<LocalVariable>();
-            this.LocalVariables.Add(new LocalVariable(null, 0));
+            this.LocalVariables.Add(new LocalVariable(new Token(TokenKind.IDENTIFIER, string.Empty), 0));
         }
 
         /// <summary>
-        /// Return current token and consume one.
+        /// Consume one token.
         /// </summary>
-        public Token AdvanceToken()
+        public void AdvanceToken()
         {
-            var retval = this.CurrentToken;
-            if (this.Tokenizer.HasMoreToken())
+            if (!this.AtEOF())
                 this.CurrentToken = this.Tokenizer.NextToken();
-            else
-                this.CurrentToken = default;
-            return retval;
         }
 
         /// <summary>
-        /// When the next token kind is the expected kind, it consumes one token and returns true.
+        /// When the current token kind is the expected kind, it consumes one token and returns true.
         /// Otherwise it returns false.
         /// </summary>
         public bool Consume(TokenKind tokenKind)
@@ -48,7 +44,7 @@ namespace mplc
         }
 
         /// <summary>
-        /// When the next token kind is the expected kind, it consumes one token and
+        /// When the current token kind is the expected kind, it consumes one token and
         /// sets the current token to the argument token, and returns true.
         /// Otherwise it returns false.
         /// </summary>
@@ -59,35 +55,47 @@ namespace mplc
                 token = default;
                 return false;
             }
-            token = this.AdvanceToken();
+            token = this.CurrentToken;
+            this.AdvanceToken();
             return true;
         }
 
         /// <summary>
-        /// When the next token kind is the expected kind, it consumes one token.
+        /// When the current token kind is the expected kind, it consumes one token and returns that token.
         /// Otherwise it reports an error.
         /// </summary>
         public Token Expect(TokenKind tokenKind)
         {
             if (this.CurrentToken.TokenKind != tokenKind)
                 CompileError.Error("Expect Error", true);
-            return this.AdvanceToken();
+            var retval = this.CurrentToken;
+            this.AdvanceToken();
+            return retval;
         }
 
         /// <summary>
-        /// When the next token is a number, it reads one token and returns that number.
+        /// When the current token is a number, it consumes one token and returns that number.
         /// Otherwise it reports an error.
         /// </summary>
         public int ExpectNumber()
         {
             if (this.CurrentToken.TokenKind != TokenKind.NUMERIC)
                 CompileError.Error("Expect number", true);
-            var val = int.Parse(this.AdvanceToken().TokenString);
+            var val = int.Parse(this.CurrentToken.TokenString);
+            this.AdvanceToken();
             return val;
         }
 
+        /// <summary>
+        /// Whether the current token is EOF.
+        /// </summary>
         public bool AtEOF() => this.CurrentToken.TokenKind == TokenKind.EOF;
 
+        /// <summary>
+        /// If there is a "LocalVarible" object corresponding to the specified token, set that object to lvar
+        /// and return true.
+        /// Otherwise, set null to lvar and return false.
+        /// </summary>
         public bool FindLocalVariable(Token token, out LocalVariable lvar)
         {
             foreach (var v in this.LocalVariables)

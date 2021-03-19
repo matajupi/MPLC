@@ -8,6 +8,15 @@ namespace mplc
         {
             this.Add(".intel_syntax noprefix");
             this.Add(".globl main");
+            // Debug ===============================================================
+            this.Add("main:");
+
+            // Prologue
+            this.Add("    push rbp");
+            this.Add("    mov rbp, rsp");
+            // ここで変数分だけrspを引く(初期化をここでしてしまう)
+            // asm.Add("    sub rsp, 16");
+            // Debug ===============================================================
         }
 
         public override void Visit(ProgramNode node)
@@ -28,7 +37,19 @@ namespace mplc
         public override void Visit(AssignNode node)
         {
             node.LeftSide.Accept(this);
-            // TODO: Implement <equality> ("=" <equality>)?
+            if (node.RightSide != default)
+            {
+                for (var i = 0; 3 > i; i++)
+                    this.Code.RemoveAt(this.Code.Count - 1);           
+
+                node.RightSide.Accept(this);
+
+                this.Add("   pop rdi");
+                this.Add("   pop rax");
+                this.Add("   mov [rax], rdi");
+                this.Add("   push rdi");
+                return;
+            }
         }
 
         public override void Visit(EqualityNode node)
@@ -44,7 +65,7 @@ namespace mplc
                     switch (node.Operator)
                     {
                         case Tokenizer.TokenKind.EQUAL_EQUAL:
-                        this.Add("   seteal");
+                        this.Add("   sete al");
                         break;
                         case Tokenizer.TokenKind.EXCLAMATION_EQUAL:
                         this.Add("   setne al");
@@ -143,7 +164,10 @@ namespace mplc
 
         public override void Visit(LocalVariableNode node)
         {
-            throw new NotImplementedException();
+            this.ComputeLocalVariableAddress(node);
+            this.Add("   pop rax");
+            this.Add("   mov rax, [rax]");
+            this.Add("   push rax");
         }
 
         public void BinaryOperation(Action operateAction)
@@ -151,6 +175,14 @@ namespace mplc
             this.Add("   pop rdi");
             this.Add("   pop rax");
             operateAction();
+            this.Add("   push rax");
+        }
+
+        public void ComputeLocalVariableAddress(LocalVariableNode node)
+        {
+            var lvar = node.LocalVariable;
+            this.Add("   mov rax, rbp");
+            this.Add($"   sub rax, {lvar.Offset}");
             this.Add("   push rax");
         }
     }

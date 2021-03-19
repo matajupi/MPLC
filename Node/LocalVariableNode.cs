@@ -10,15 +10,13 @@ namespace mplc
 
         public override void Parse(Context context)
         {
-            context.Consume(Tokenizer.TokenKind.IDENTIFIER, out Token token);
+            var token = context.Expect(Tokenizer.TokenKind.IDENTIFIER);
             this.Parse(context, token);
         }
 
         public void Parse(Context context, Token token)
         {
-            this.IsDefinition = context.FindLocalVariable(token, out LocalVariable v);
-            
-            if (this.IsDefinition)
+            if (context.FindLocalVariable(token, out LocalVariable v))
                 this.IsDefinition = false;
             else
             {

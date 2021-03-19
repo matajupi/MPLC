@@ -7,6 +7,9 @@ namespace mplc
     {
         public List<Node> StatementNodes { get; set; }
 
+        public ProgramNode()
+        => this.StatementNodes = new List<Node>();
+
         public override void Parse(Context context)
         {
             while (!context.AtEOF())

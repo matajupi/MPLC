@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace mplc
 {
@@ -15,14 +16,16 @@ namespace mplc
 
         public override bool Equals(object obj)
         {
-            if (obj == null) return false;
-            if (obj is Token)
-            {
-                var tok = obj as Token;
-                if (this.TokenKind == tok.TokenKind 
-                && this.TokenString == tok.TokenString) return true;
-            }
-            return false;
+            var tok = obj as Token;
+
+            return tok != null 
+            && this.TokenKind == tok.TokenKind
+            && this.TokenString == tok.TokenString;
+        }
+
+        public override int GetHashCode()
+        {
+            return EqualityComparer<string>.Default.GetHashCode(this.TokenString) ^ (int)this.TokenKind;
         }
     }
 }
