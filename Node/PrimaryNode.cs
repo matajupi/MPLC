@@ -15,11 +15,11 @@ namespace mplc
                 context.Expect(Tokenizer.TokenKind.RIGHT_PAREN);
                 return;
             }
-            if (context.Consume(Tokenizer.TokenKind.IDENTIFIER, out Token token))
+            var token = context.GetTokenOrDefaultAt(context.CurrentTokenIndex);
+            if (token != default && token.TokenKind == Tokenizer.TokenKind.IDENTIFIER)
             {
-                var lvar = new LocalVariableNode();
-                lvar.Parse(context, token);
-                this.Node = lvar;
+                this.Node = new LocalVariableNode();
+                this.Node.Parse(context);
                 return;
             }
             this.Node = new NumericLiteralNode();

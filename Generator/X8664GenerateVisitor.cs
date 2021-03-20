@@ -26,12 +26,21 @@ namespace mplc
 
         public override void Visit(StatementNode node)
         {
-            node.ExpressionNode.Accept(this);
+            node.Node.Accept(this);
+        }
+
+        public override void Visit(ReturnNode node)
+        {
+            node.Node.Accept(this);
+            this.Add("   pop rax");
+            this.Add("   mov rsp, rbp");
+            this.Add("   pop rbp");
+            this.Add("   ret");
         }
 
         public override void Visit(ExpressionNode node)
         {
-            node.AssignNode.Accept(this);
+            node.Node.Accept(this);
         }
 
         public override void Visit(AssignNode node)
@@ -146,7 +155,7 @@ namespace mplc
 
         public override void Visit(UnaryNode node)
         {
-            node.PrimaryNode.Accept(this);
+            node.Node.Accept(this);
         }
 
         public override void Visit(PrimaryNode node)

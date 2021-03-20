@@ -116,6 +116,10 @@ end
 
 <program> ::= <statement>*
 <statement> ::= <expression> ";"
+            | <return> ";"
+<return> ::= "return" <expression>
+<if> ::= "if" "(" <expression> ")" <statement> <else>?
+<else> ::= "else" <statement>
 <expression> ::= <assign>
 <assign> ::= <equality> ("=" <equality>)?
 <equality> ::= <relational> ("==" <relational> | "!=" <relational>)?

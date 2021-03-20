@@ -48,5 +48,8 @@ assert 3 "a; a = 3; a;"
 assert 4 "a; b; a = 3; b = 1; a + b;"
 assert 3 "sum; sum = 0; sum = sum + 1; sum = sum + 2; sum;"
 assert 9 "num1 = 3; num2 = 5; num1 = num1 * num2 + num2 - num1 * num2 + num1 + (num1 != num2); num1;"
+assert 11 "return 11;"
+assert 10 "value = 10; _ = 32; return value;"
+assert 10 "n1 = 3; n2 = 4; return n2 * n2 - n1 - n1;"
 
 echo OK

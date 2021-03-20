@@ -5,7 +5,7 @@ namespace mplc
 {
     class UnaryNode : Node
     {
-        public Node PrimaryNode { get; set; }
+        public Node Node { get; set; }
 
         public override void Parse(Context context)
         {
@@ -20,12 +20,12 @@ namespace mplc
                 subZero.RightSides.Add(
                     new Tuple<Tokenizer.TokenKind, Node>(Tokenizer.TokenKind.MINUS, right)
                 );
-                this.PrimaryNode = subZero;
+                this.Node = subZero;
                 return;
             }
             context.Consume(Tokenizer.TokenKind.PLUS);
-            this.PrimaryNode = new PrimaryNode();
-            this.PrimaryNode.Parse(context);
+            this.Node = new PrimaryNode();
+            this.Node.Parse(context);
         }
 
         public override void Accept(AssemblyGenerateVisitor v)

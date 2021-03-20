@@ -17,6 +17,8 @@ namespace mplc
         {
             EQUAL,
             RETURN,
+            IF,
+            ELSE,
             NUMERIC,
             PLUS,
             MINUS,
@@ -39,6 +41,8 @@ namespace mplc
         {
             { TokenKind.EQUAL, "=" },
             { TokenKind.RETURN, "return"},
+            { TokenKind.IF, "if" },
+            { TokenKind.ELSE, "else" },
             { TokenKind.NUMERIC , "numeric" },
             { TokenKind.PLUS, "+"},
             { TokenKind.MINUS, "-"},
@@ -136,13 +140,24 @@ namespace mplc
                     p += len;
                     continue;
                 }
-                // Identifier
+                // Identifier or keyword
                 if (this.IsAllowedCharacter(this.Text[p]))
                 {
                     var builder = new StringBuilder();
                     for (; this.IsAllowedCharacter(this.Text[p]); p++)
                         builder.Append(this.Text[p]);
-                    var token = new Token(TokenKind.IDENTIFIER, builder.ToString());
+                    var word = builder.ToString();
+
+                    // Keyword
+                    if (ExistsKey(word))
+                    {
+                        var tk = ReverseReference(word);
+                        tokens.Add(new Token(tk, word));
+                        continue;
+                    }
+                    
+                    // Identifier
+                    var token = new Token(TokenKind.IDENTIFIER, word);
                     tokens.Add(token);
                     continue;
                 }

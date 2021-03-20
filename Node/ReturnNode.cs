@@ -2,13 +2,14 @@ using System;
 
 namespace mplc
 {
-    class ExpressionNode : Node
+    class ReturnNode : Node
     {
         public Node Node { get; set; }
 
         public override void Parse(Context context)
         {
-            this.Node = new AssignNode();
+            context.Expect(Tokenizer.TokenKind.RETURN);
+            this.Node = new ExpressionNode();
             this.Node.Parse(context);
         }
 

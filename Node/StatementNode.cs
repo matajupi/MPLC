@@ -4,12 +4,21 @@ namespace mplc
 {
     class StatementNode : Node
     {
-        public Node ExpressionNode { get; set; }
+        public Node Node { get; set; }
 
         public override void Parse(Context context)
         {
-            this.ExpressionNode = new ExpressionNode();
-            this.ExpressionNode.Parse(context);
+            var token = context.GetTokenOrDefaultAt(context.CurrentTokenIndex);
+            if (token != default && token.TokenKind == Tokenizer.TokenKind.RETURN)
+            {
+                this.Node = new ReturnNode();
+                this.Node.Parse(context);
+            }
+            else
+            {
+                this.Node = new ExpressionNode();
+                this.Node.Parse(context);
+            }
             context.Expect(Tokenizer.TokenKind.SEMICOLON);
         }
 
