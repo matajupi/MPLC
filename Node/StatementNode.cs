@@ -9,17 +9,23 @@ namespace mplc
         public override void Parse(Context context)
         {
             var token = context.GetTokenOrDefaultAt(context.CurrentTokenIndex);
-            if (token != default && token.TokenKind == Tokenizer.TokenKind.RETURN)
+            switch (token.TokenKind)
             {
+                case Tokenizer.TokenKind.RETURN:
                 this.Node = new ReturnNode();
                 this.Node.Parse(context);
-            }
-            else
-            {
+                context.Expect(Tokenizer.TokenKind.SEMICOLON);
+                break;
+                case Tokenizer.TokenKind.IF:
+                this.Node = new IfNode();
+                this.Node.Parse(context);
+                break;
+                default:
                 this.Node = new ExpressionNode();
                 this.Node.Parse(context);
+                context.Expect(Tokenizer.TokenKind.SEMICOLON);
+                break;
             }
-            context.Expect(Tokenizer.TokenKind.SEMICOLON);
         }
 
         public override void Accept(AssemblyGenerateVisitor v)

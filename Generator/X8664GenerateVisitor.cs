@@ -4,6 +4,8 @@ namespace mplc
 {
     class X8664GenerateVisitor : AssemblyGenerateVisitor
     {
+        private int IdentNumber = 0;
+
         public override void Initialize()
         {
             this.Add(".intel_syntax noprefix");
@@ -36,6 +38,26 @@ namespace mplc
             this.Add("   mov rsp, rbp");
             this.Add("   pop rbp");
             this.Add("   ret");
+        }
+
+        public override void Visit(IfNode node)
+        {
+            var pnum = this.IdentNumber++;
+            node.ConditionNode.Accept(this);
+            this.Add("   pop rax");
+            this.Add("   cmp rax, 0");
+            this.Add($"   je .Lelse{pnum}");
+            node.StatementNode.Accept(this);
+            this.Add($"   jmp .Lend{pnum}");
+            this.Add($".Lelse{pnum}:");
+            if (node.ElseNode != default)
+                node.ElseNode.Accept(this);
+            this.Add($".Lend{pnum}:");
+        }
+
+        public override void Visit(ElseNode node)
+        {
+            node.StatementNode.Accept(this);
         }
 
         public override void Visit(ExpressionNode node)

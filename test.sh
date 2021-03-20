@@ -51,5 +51,8 @@ assert 9 "num1 = 3; num2 = 5; num1 = num1 * num2 + num2 - num1 * num2 + num1 + (
 assert 11 "return 11;"
 assert 10 "value = 10; _ = 32; return value;"
 assert 10 "n1 = 3; n2 = 4; return n2 * n2 - n1 - n1;"
+assert 10 "n1 = 5; n2 = 10; if (n1 == 5) return n2; else return n1;"
+assert 20 "n1 = 10; n2 = 20; n3 = 30; n4; if (n1 == 30) n4 = n1; else if (n1 == 20) n4 = n3; else if (n1 == 10) n4 = n2; else n4 = 5; return n4;"
+
 
 echo OK
