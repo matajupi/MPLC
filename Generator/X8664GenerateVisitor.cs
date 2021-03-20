@@ -60,6 +60,19 @@ namespace mplc
             node.StatementNode.Accept(this);
         }
 
+        public override void Visit(WhileNode node)
+        {
+            var pnum = this.IdentNumber++;
+            this.Add($".Lbegin{pnum}:");
+            node.ConditionNode.Accept(this);
+            this.Add("   pop rax");
+            this.Add("   cmp rax, 0");
+            this.Add($"   je .Lend{pnum}");
+            node.StatementNode.Accept(this);
+            this.Add($"   jmp .Lbegin{pnum}");
+            this.Add($".Lend{pnum}:");
+        }
+
         public override void Visit(ExpressionNode node)
         {
             node.Node.Accept(this);

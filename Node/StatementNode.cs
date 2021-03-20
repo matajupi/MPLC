@@ -20,6 +20,10 @@ namespace mplc
                 this.Node = new IfNode();
                 this.Node.Parse(context);
                 break;
+                case Tokenizer.TokenKind.WHILE:
+                this.Node = new WhileNode();
+                this.Node.Parse(context);
+                break;
                 default:
                 this.Node = new ExpressionNode();
                 this.Node.Parse(context);
