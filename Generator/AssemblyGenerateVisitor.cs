@@ -17,6 +17,7 @@ namespace mplc
         public abstract void Visit(IfNode node);
         public abstract void Visit(ElseNode node);
         public abstract void Visit(WhileNode node);
+        public abstract void Visit(ForNode node);
         public abstract void Visit(ExpressionNode node);
         public abstract void Visit(AssignNode node);
         public abstract void Visit(EqualityNode node);

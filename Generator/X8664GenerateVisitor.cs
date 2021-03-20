@@ -73,6 +73,26 @@ namespace mplc
             this.Add($".Lend{pnum}:");
         }
 
+        public override void Visit(ForNode node)
+        {
+            var pnum = this.IdentNumber++;
+            if (node.InitializeNode != default)
+                node.InitializeNode.Accept(this);
+            this.Add($".Lbegin{pnum}:");
+            if (node.ConditionNode != default)
+            {
+                node.ConditionNode.Accept(this);
+                this.Add("   pop rax");
+                this.Add("   cmp rax, 0");
+                this.Add($"   je .Lend{pnum}");
+            }
+            node.StatementNode.Accept(this);
+            if (node.UpdateNode != default)
+                node.UpdateNode.Accept(this);
+            this.Add($"   jmp .Lbegin{pnum}");
+            this.Add($".Lend{pnum}:");
+        }
+
         public override void Visit(ExpressionNode node)
         {
             node.Node.Accept(this);

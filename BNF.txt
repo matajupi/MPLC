@@ -119,10 +119,12 @@ end
             | <return> ";"
             | <if>
             | <while>
+            | <for>
 <return> ::= "return" <expression>
 <if> ::= "if" "(" <expression> ")" <statement> <else>?
 <else> ::= "else" <statement>
 <while> ::= "while" "(" <expression> ")" <statement>
+<for> ::= "for" "(" <expression>? ";" <expression>? ";" <expression>? ")" <statement>
 <expression> ::= <assign>
 <assign> ::= <equality> ("=" <equality>)?
 <equality> ::= <relational> ("==" <relational> | "!=" <relational>)?
