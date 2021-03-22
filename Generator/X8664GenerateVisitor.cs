@@ -31,6 +31,12 @@ namespace mplc
             node.Node.Accept(this);
         }
 
+        public override void Visit(BlockNode node)
+        {
+            foreach (var n in node.Nodes)
+                n.Accept(this);
+        }
+
         public override void Visit(ReturnNode node)
         {
             node.Node.Accept(this);

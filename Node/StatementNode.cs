@@ -11,6 +11,10 @@ namespace mplc
             var token = context.GetTokenOrDefaultAt(context.CurrentTokenIndex);
             switch (token.TokenKind)
             {
+                case Tokenizer.TokenKind.LEFT_CURLY_BRACE:
+                this.Node = new BlockNode();
+                this.Node.Parse(context);
+                break;
                 case Tokenizer.TokenKind.RETURN:
                 this.Node = new ReturnNode();
                 this.Node.Parse(context);

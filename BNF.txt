@@ -116,10 +116,12 @@ end
 
 <program> ::= <statement>*
 <statement> ::= <expression> ";"
+            | <block>
             | <return> ";"
             | <if>
             | <while>
             | <for>
+<block> ::= "{" <statement>* "}"
 <return> ::= "return" <expression>
 <if> ::= "if" "(" <expression> ")" <statement> <else>?
 <else> ::= "else" <statement>
