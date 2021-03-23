@@ -27,6 +27,7 @@ namespace mplc
         public abstract void Visit(MultiplicationNode node);
         public abstract void Visit(UnaryNode node);
         public abstract void Visit(PrimaryNode node);
+        public abstract void Visit(MethodCallNode node);
         public abstract void Visit(NumericLiteralNode node);
         public abstract void Visit(LocalVariableNode node);
         

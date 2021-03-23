@@ -1,5 +1,5 @@
 <program>           ::= <class>  | <struct> | <using> | <enum> | <interface>
-<prefix_modifier>   ::= "static" | "dynamic" | "abstract" | "override" | "virtual" | "final"
+<prefix_modifier>   ::= "static" | "abstract" | "override" | "virtual"
 <class>             ::= <accessor>? <prefix_modifier>* "class" <ident> (":" <ident>* )? "{" (<method> | <property> | <member_variable> | <enum> | <constructor> | <destructor>)* "}"
 <method>            ::= <accessor>? <prefix_modifier>* "method" <ident> "(" ("var" <ident> ":" <type>)* ")" ":" <type> <block>
 <member_variable>   ::= <accessor>? <prefix_modifier>* "var" <ident> ":" <type> ("=" <expression>)? ";"
@@ -11,37 +11,45 @@ public class Program {
 
     public static readonly CONST_VAR: int = 1000;
 
-    static method Main(var args: string[]): void {
+    static method Main(var args: string[]): void
+    {
         var a: int = 3;
         var program = new Program("hello", a);
         System.Std.WriteLine(program.Name.get());
         System.Std.WriteLine(program.Age.get());
     }
 
-    public constructor(var name: string, var age: int) {
+    public constructor(var name: string, var age: int)
+    {
         this.Name.set(name);
         this.Age.set(age);
     }
 
-    public dynamic method GetData(): (string, int) {
+    public method GetData(): (string, int)
+    {
         return (this.Name.get(), this.Age.get());
     }
 }
 
-public interface IComparable {
+public interface IComparable
+{
     method CompareTo(var other: IComparable): int;
 }
 
-public abstract class Base {
+public abstract class Base
+{
     public abstract method Move(var distance: int): void;
 }
 
-public class Sub : Base, IComparable {
-    public final override method Move(var distance: int): void {
+public class Sub : Base, IComparable
+{
+    public override method Move(var distance: int): void
+    {
 
     }
 
-    public method CompareTo(var other: IComparable): int {
+    public method CompareTo(var other: IComparable): int
+    {
         return 0;
     }
 }
@@ -57,60 +65,89 @@ pub class Program:
         var program = new Program(name, a)
         System.Std.WriteLine(program.Name)
         System.Std.WriteLine(program.Age)
-    end
 
     pub const(name: string, age: int):
         Name = name
         Age = age
-    end
 
     pub met GetData(): (string, int):
         return (this.Name, this.Age)
-    end
-end
 
 pub inter IComparable:
     met CompareTo(other: IComparable): int
-end
 
 pub abst class Base:
     pub abst met Move(distance: int): void
-end
 
 pub class Sub(Base, IComparable):
     pub fin met Move(distance: int): void:
         pass
-    end
 
     pub met CompareTo(other: IComparable): int:
         return 0
-    end
-end
 
 pub class Generic<T>(IComparable):
     pass
-end
 
+<> ::= <defvar> ":" <linefeed>
+# スペースかタブの数をカウント
+# 所定のSyntaxを踏んだらブロックに入る
+<stmt> ::= <expression> (<linefeed> | ";")
+# 意味のあるLinefeedだけ読み込み意味のないものは読み飛ばす
+# スペースの数が減少したらブロックの終わりを表すトークンを挿入してブロックを抜ける
+# 最初はタブの数をスペース4つ分（タブ1つ）に設定しておく
 
-<program> ::= <class> | <interface>
-<class> ::= <accessor>? <prefix>* "class" <ident> ("<" <ident>* ">")? ("(" <ident>* ")")? <classblock>
-<accessor> ::= "pub" | "pri" | "prt" | "itn"
-<prefix> ::= "stat" | "abst" | "fin"
-<classblock> ::= ":" (<method> | <property> | <membervar> | <constructor>)* "end"
-<method> ::= <accessor>? <prefix>* "met" <ident> "(" ("var"? <ident> ":" <type>)* ")" ":" <type> <block>
-<block> ::= ":" <statement>* "end"
-<statement> ::= <expression>
+// ==========================================
+
+<program> ::= (
+            <class>
+            | <interface>
+            | <enum>
+            | <struct>
+            | <using>
+            )*
+<class> ::= <accessor>? <prefix>* "class" <identifier> ("<" <identifier>* ">")? ("(" <identifier>* ")")? <class-block>
+<class-block> ::= "{" (
+                <method> 
+                | <property> 
+                | <member-variable>
+                | <constructor>
+                | <class>
+                | <enum>
+                )* "}"
+<method> ::= <accessor>? <prefix>* "method" <identifier> "(" <variable-definition>* ")" ":" <identifier> <block>
+<block> ::= "{" <statement>* "}"
+<statement> ::= <expression> ";"
+            | <block>
+            | <return> ";"
             | <if>
-            | <for>
             | <while>
-            | <return>
-
+            | <for>
+<return> ::= "return" <expression>
+<if> ::= "if" "(" <expression> ")" <statement> <else>?
+<else> ::= "else" <statement>
+<while> ::= "while" "(" <expression> ")" <statement>
+<for> ::= "for" "(" <expression>? ";" <expression>? ";" <expression>? ")" <statement>
 <expression> ::= <assign>
 <assign> ::= <equality> ("=" <equality>)?
-<equality> ::= <relational> ("||" <relational> | "&&" <relational>)*
-<relational> ::= <calc> ("==" <calc> | "!=" <calc> | "<" <calc> | "<=" <calc> | ">" <calc> | ">=" <calc>)?
-<calc> ::= <unary> ("+" <unary> | "-" <unary> | "*" <unary> | "/" <unary> | "&" <unary> | "|" <unary> | "%" <unary> | "^" <unary>)*
-
+<equality> ::= <relational> ("==" <relational> | "!=" <relational>)?
+<relational> ::= <addition> (
+    "<" <addition>
+    | "<=" <addition>
+    | ">" <addition>
+    | ">=" <addition>
+)?
+<addition> ::= <multiplication> ("+" <multiplication> | "-" <multiplication>)*
+<multiplication> ::= <unary> ("*" <unary> | "/" <unary>)*
+<unary> ::= ("+" | "-")? <primary>
+<primary> ::= <numericliteral> 
+            | <localvariable> 
+            | "(" <expression> ")"
+            | <method-call>
+<method-call> ::= <identifier> "(" ")"
+<numericliteral> ::= ("0" ~ "9")*
+<localvariable> ::= <identifier>
+<identifier> ::= ("a" ~ "z" | "A" ~ "Z" | "0" ~ "9" | "_")*
 
 // ==========================================
 
@@ -139,6 +176,11 @@ end
 <addition> ::= <multiplication> ("+" <multiplication> | "-" <multiplication>)*
 <multiplication> ::= <unary> ("*" <unary> | "/" <unary>)*
 <unary> ::= ("+" | "-")? <primary>
-<primary> ::= <numericliteral> | <localvariable> | "(" <expression> ")"
+<primary> ::= <numericliteral> 
+            | <localvariable> 
+            | "(" <expression> ")"
+            | <method-call>
+<method-call> ::= <identifier> "(" ")"
 <numericliteral> ::= ("0" ~ "9")*
-<localvariable> ::= ("a" ~ "z" | "A" ~ "Z" | "0" ~ "9" | "_")*
+<localvariable> ::= <identifier>
+<identifier> ::= ("a" ~ "z" | "A" ~ "Z" | "0" ~ "9" | "_")*

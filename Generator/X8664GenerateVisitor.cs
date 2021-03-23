@@ -224,6 +224,11 @@ namespace mplc
             node.Node.Accept(this);
         }
 
+        public override void Visit(MethodCallNode node)
+        {
+            this.Add($"   call {node.IdentifierToken.TokenString}");
+        }
+
         public override void Visit(NumericLiteralNode node)
         {
             this.Add($"   push {node.Number}");
