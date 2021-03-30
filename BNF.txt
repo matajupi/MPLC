@@ -97,57 +97,190 @@ pub class Generic<T>(IComparable):
 # スペースの数が減少したらブロックの終わりを表すトークンを挿入してブロックを抜ける
 # 最初はタブの数をスペース4つ分（タブ1つ）に設定しておく
 
-// ==========================================
+// 継承はutil classはすべての種別のクラスにそれ以外はそれぞれの種別(localなど)のクラスにのみ単一継承が可能
 
-<program> ::= (
-            <class>
-            | <interface>
-            | <enum>
-            | <struct>
-            | <using>
-            )*
-<class> ::= <accessor>? <prefix>* "class" <identifier> ("<" <identifier>* ">")? ("(" <identifier>* ")")? <class-block>
-<class-block> ::= "{" (
-                <method> 
-                | <property> 
-                | <member-variable>
-                | <constructor>
-                | <class>
-                | <enum>
-                )* "}"
-<method> ::= <accessor>? <prefix>* "method" <identifier> "(" <variable-definition>* ")" ":" <identifier> <block>
-<block> ::= "{" <statement>* "}"
+public class U // util
+{
+    static method ComputeHevyNumber(var number: int): int {
+
+    }
+
+    static method PutNumber(): void {
+        var number = input1.Read();
+        number = server ComputeHevyNumber(number);
+        textbox1.Write(number);
+        number = ComputeHevyNumber(number);
+    }
+}
+
+local server --websock-- browser(wasm) --websock-- global server
+
+public local class A // local pc or server(All program starts this point)
+{
+    public static method Main(string[] args)
+    {
+
+    }
+}
+
+public wasm class B // web assembly　思想的には基本WASMとWebSocket
+{
+    public static method Main(string[] args)
+    {
+
+    }
+}
+
+public http class G // Http
+{
+
+}
+
+public view class C // normal view
+{
+
+}
+
+public websock class F // WebSocket
+{
+
+}
+
+public controller class D // controller
+{
+
+}
+
+public model class E // model
+{
+
+}
+
+// ==========================================
+言語思想：
+・大きな構造はオブジェクト指向
+・ループはできるだけ関数型プログラミングで
+(Struct, ジェネリクスはとりあえず実装しない)
+
+# compile-option以外はマクロによる書き換えが可能なため、必ずしもこのような文法になるわけではない。
+# 最初にcompile-optionの処理を行ってからプログラムを再構成しTokenizeする。
+# 少し特殊な要素でTokenizeの前にコードを走査してこれだけをコンパイルする。("#"から始まる行となる。)
+# また、使用時は前後のlinefeedが必須となる。(行の最初が必ず"#"にならなければならない。)
+<program>                           ::= (
+                                    | <top-struct>
+                                    | <namespace-definition>
+                                    | <using>
+                                    | <using-static>
+                                    | <compile-option>  
+                                    )*
+
+# "#"の後に続くキーワードとの間にはスペースは不要
+<compile-option>                    ::= ( 
+                                    "#" <macro-definition>
+                                    | <compile-end>
+                                    | <compile-if> 
+                                    | <compile-elseif> 
+                                    | <compile-else> 
+                                    | <compile-type-definition> )
+# compile-optionのcompile-end以外の要素は範囲は最後にcompile-endを置くことにより終わりを表現する。
+# all-characterは改行も可能
+<macro-definition>                  ::= "define" <identifier> "=" <all-character>* <linefeed>
+<compile-end>                       ::= "end" <linefeed>
+<compile-if>                        ::= "if" <compile-condition> <linefeed>
+<compile-elseif>                    ::= "elseif" <compile-condition> <linefeed>
+<compile-else>                      ::= "else" <linefeed>
+<compile-type-definition>           ::= "typedef" <identifier> <linefeed>
+# 環境依存
+<linefeed>                          ::= "\n" | "\r\n" 
+
+<using>                             ::= "using" <namespace> ";"
+<using-static>                      ::= "using" "static" <type> ";"
+<namespace-definition>              ::= "namespace" <identifier> "{" <program> "}"
+
+<access-modifier>                   ::= "public" 
+                                    | "private" 
+                                    | "protected"
+<class-prefix-modifier>             ::= "static" 
+                                    | "abstract"
+<method-prefix-modifier>            ::= "static" 
+                                    | "abstract" 
+                                    | "virtual" 
+                                    | "override"
+<member-variable-prefix-modifier>   ::= "static"
+                                    | "readonly"
+
+<top-struct>                        ::= (
+                                    <class-definition>
+                                    | <interface-definition>
+                                    | <enum-definition>
+                                    )*
+
+<interface-definition>              ::= <access-modifier>? "interface" <identifier> (":" <interface>*)? <interface-block>
+<interface-block>                   ::= "{" <method-declaration>* "}"
+# interfaceはpublic only
+<method-declaration>                ::= "public"? "method" <identifier> "(" (<local-variable-definition> | <type>)* ")" ":" <type> ";" 
+
+<enum-definition>                   ::= <access-modifier>? "enum" <identifier> <enum-block>
+<enum-block>                        ::= "{" (<enum-element> <assign>?)* "}"
+<enum-element>                      ::= <identifier>
+
+<class-definition>                  ::= <access-modifier>? <class-prefix-modifier>* "class" <identifier> (":" <type>*)? <class-block>
+# property, member-variable, local-variableなどは使用時はすべてvariableとして認識する。
+<class-block>                       ::= "{" (
+                                    <method-definition> 
+                                    | <property>
+                                    | <member-variable>
+                                    | <constructor-definition>
+                                    | <destructor-definition>
+                                    | <top-struct>
+                                    )* "}"
+<property>                          ::= <property-definition> <assign>?
+<property-definition>               ::= <access-modifier>? "property" <identifier> "("<getter-definition> <setter-definition>")" ":" <type>
+<getter-definition>                 ::= <access-modifier>? "get" <method>? ";"
+<setter-definition>                 ::= <access-modifier>? "set" <method>? ";"
+<method>                            ::= <identifier> | <lambda>
+<member-variable>                   ::= <member-variable-definition> <assign>? ";"
+<member-variable-definition>        ::= <access-modifier>? <member-variable-prefix-modifier>* "var" <identifier> ( ":" <type> )?
+<method-definition>                 ::= <access-modifier>? <method-prefix-modifier>* "method" <identifier> "(" <local-variable-definition>* ")" ":" <type> <block>
+<local-variable>                    ::= <local-variable-definition> <assign>?
+<local-variable-definition>         ::= "var" <identifier> (":" <type>)?
+<block>                             ::= "{" <statement>* "}"
 <statement> ::= <expression> ";"
             | <block>
             | <return> ";"
             | <if>
             | <while>
             | <for>
-<return> ::= "return" <expression>
-<if> ::= "if" "(" <expression> ")" <statement> <else>?
-<else> ::= "else" <statement>
-<while> ::= "while" "(" <expression> ")" <statement>
-<for> ::= "for" "(" <expression>? ";" <expression>? ";" <expression>? ")" <statement>
-<expression> ::= <assign>
-<assign> ::= <equality> ("=" <equality>)?
-<equality> ::= <relational> ("==" <relational> | "!=" <relational>)?
-<relational> ::= <addition> (
-    "<" <addition>
-    | "<=" <addition>
-    | ">" <addition>
-    | ">=" <addition>
-)?
-<addition> ::= <multiplication> ("+" <multiplication> | "-" <multiplication>)*
-<multiplication> ::= <unary> ("*" <unary> | "/" <unary>)*
-<unary> ::= ("+" | "-")? <primary>
-<primary> ::= <numericliteral> 
-            | <localvariable> 
-            | "(" <expression> ")"
-            | <method-call>
-<method-call> ::= <identifier> "(" ")"
-<numericliteral> ::= ("0" ~ "9")*
-<localvariable> ::= <identifier>
-<identifier> ::= ("a" ~ "z" | "A" ~ "Z" | "0" ~ "9" | "_")*
+<type>                              ::= <primitive> | <class> | <interface> | <enum>
+<variable>                          ::= <identifier>
+<identifier>                        ::= ["a"-"z""A"-"Z""_"]["a"-"z""A"-"Z""0"-"9""_"]*
+<numericliteral>                    ::= ("0" ~ "9")*
+
+
+
+
+<return>            ::= "return" <expression>
+<if>                ::= "if" "(" <expression> ")" <statement> <else>?
+<else>              ::= "else" <statement>
+<while>             ::= "while" "(" <expression> ")" <statement>
+<for>               ::= "for" "(" <expression>? ";" <expression>? ";" <expression>? ")" <statement>
+<expression>        ::= <assign>
+<assign>            ::= <equality> ("=" <equality>)?
+<equality>          ::= <relational> ("==" <relational> | "!=" <relational>)?
+<relational>        ::= <addition> (
+                    "<" <addition>
+                    | "<=" <addition>
+                    | ">" <addition>
+                    | ">=" <addition>
+                    )?
+<addition>          ::= <multiplication> ("+" <multiplication> | "-" <multiplication>)*
+<multiplication>    ::= <unary> ("*" <unary> | "/" <unary>)*
+<unary>             ::= ("+" | "-")? <primary>
+<primary>           ::= <numericliteral> 
+                    | <local-variable> 
+                    | "(" <expression> ")"
+                    | <method-call>
+<method-call>       ::= <identifier> "(" ")"
 
 // ==========================================
 
